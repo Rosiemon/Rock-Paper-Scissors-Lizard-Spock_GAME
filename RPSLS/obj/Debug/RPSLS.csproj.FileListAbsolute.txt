@@ -1,0 +1,6 @@
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\bin\Debug\RPSLS.exe.config
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\bin\Debug\RPSLS.exe
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\bin\Debug\RPSLS.pdb
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\obj\Debug\RPSLS.csprojResolveAssemblyReference.cache
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\obj\Debug\RPSLS.exe
+C:\Users\RoseMR24\Documents\RPSLS\RPSLS\obj\Debug\RPSLS.pdb
