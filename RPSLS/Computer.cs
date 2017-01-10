@@ -6,24 +6,21 @@ using System.Threading.Tasks;
 
 namespace RPSLS
 {
-    class Computer : Player
+    public class Computer : Player
     {
-        public List<string> choices = new List<string>();
-        Random random = new Random();
-        public void Load(int data)
+        public override void GetName()
         {
-            choices.Add("Rock");
-            choices.Add("Paper");
-            choices.Add("Scissors");
-            choices.Add("Lizard");
-            choices.Add("Spock");
+            Random random = new Random();
+            List<string> names = new List<string> {"Cortana", "Alexa", "Siri", "Elvis", "Hercules", "Apollo"};
+            name = names[random.Next(0, 5)];
+            Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("\nHello! My name is {0} and I'll be your opponent. \n", name); Console.ResetColor();
         }
-
-        public string MakeChoice()
+        public override void MakeChoice()
         {
-            int choice = random.Next(choices.Count);
-            Console.WriteLine(choices[choice]);
-            return choices[choice];
+            Random random = new Random();
+            List<int> choices = new List<int> { 1, 2, 3, 4, 5};
+            choice = choices[random.Next(1, 4)];
+            Console.WriteLine(choice);
         }
     }
 }

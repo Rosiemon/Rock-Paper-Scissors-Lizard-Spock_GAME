@@ -12,9 +12,8 @@ namespace RPSLS
         {
             Game Game = new Game();
             Computer computer = new Computer();
-
-            Game.PlayGame();
-
+            Game.DisplayWelcomeMessage();
+            Game.StartGame();
             Console.ReadLine();
         }
     }

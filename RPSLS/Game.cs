@@ -6,317 +6,378 @@ using System.Threading.Tasks;
 
 namespace RPSLS
 {
-    class Game
+    public class Game
     {
         List<string> Rules = new List<string>();
+        List<int> choices = new List<int> { 1, 2, 3, 4, 5};
         Player playerOne;
         Player playerTwo;
-
+        public void StartGame()
+        {
+            AskForRules();
+            PlayGame();
+        }
         public void PlayGame()
         {
-            DisplayWelcomeMessage();
-            DisplayRules();
             GetPlayers();
-
+            ChoosePlayerNames();
             while ((playerOne.GetScore() < 2 && (playerTwo.GetScore() < 2)))
             {
                 playerOne.MakeChoice();
-                playerTwo.MakeChoice();
                 EvaluateChoice();
             }
             EndGame();
         }
-
-
         public void DisplayWelcomeMessage()
         {
-            Console.WriteLine("||| WELCOME TO ROCK PAPER SCISSORS LIZARD SPOCK |||");
-            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Magenta; Console.WriteLine("\n||| WELCOME TO ROCK PAPER SCISSORS LIZARD SPOCK |||");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); Console.ResetColor();
         }
-
-
+        public void AskForRules()
+        {
+            Console.WriteLine("WOULD YOU LIKE TO SEE THE RULES?");
+            Console.WriteLine("SELECT [1] YES");
+            Console.WriteLine("SELECT [2] NO \n");
+            string input = Console.ReadLine().ToLower();
+            if (input == "1" || input == "y")
+            {
+                DisplayRules();
+            }
+            else if (input == "2" || input == "n")
+            {
+                PlayGame();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \nSELECT [1] YES \nSELECT [2] NO\n");
+                Console.WriteLine("");
+                GetPlayers();
+            }
+        }
         public void DisplayRules()
         {
-            Rules.Add("PLEASE SEE THE RULES BELOW:");
-            Rules.Add(">>>>>>>>>>");
-            Rules.Add("SCISSORS CUTS PAPER");
-            Rules.Add("PAPER COVERS ROCK");
-            Rules.Add("ROCK CRUSHES LIZARD");
-            Rules.Add("LIZARD POISONS SPOCK");
-            Rules.Add("SPOCK SMASHES SCISSORS");
-            Rules.Add("SCISSORS DECAPITES LIZARD");
-            Rules.Add("LIZARD EATS PAPER");
-            Rules.Add("PAPER DISPROVES SPOCK");
-            Rules.Add("SPOCK VAPORIZES ROCK");
-            Rules.Add("ROCK CRUSHES SCISSORS");
-            Rules.Add("<<<<<<<<<<");
-            Rules.Add("");
-
-            foreach (string Rule in Rules)
-            {
-                Console.WriteLine(Rule);
-            }
+            Console.WriteLine("\nPLEASE SEE THE RULES BELOW: \n>>>>>>>>>>");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("SCISSORS CUTS PAPER \nPAPER COVERS ROCK \nROCK CRUSHES LIZARD \nLIZARD POISONS SPOCK \nSPOCK SMASHES SCISSORS \nSCISSORS DECAPITES LIZARD \nLIZARD EATS PAPER \nPAPER DISPROVES SPOCK \nSPOCK VAPORIZES ROCK \nROCK CRUSHES SCISSORS \n");
+            Console.ResetColor();
         }
 
         public void GetPlayers()
         {
             Console.WriteLine("PLEASE SELECT NUMBER OF PLAYERS:");
             Console.WriteLine("SELECT [1] ONE PLAYER");
-            Console.WriteLine("SELECT [2] TWO PLAYERS");
+            Console.WriteLine("SELECT [2] TWO PLAYERS \n");
             string input = Console.ReadLine();
-
-            if (input == ("1"))
+            if (input == "1")
             {
                 playerOne = new Human();
                 playerTwo = new Computer();
-                Console.WriteLine("");
-                Console.WriteLine("You selected SINGLE PLAYER");
+                Console.ForegroundColor = ConsoleColor.Magenta; Console.WriteLine("You selected SINGLE PLAYER \n"); Console.ResetColor();
             }
-            else if (input == ("2"))
+            else if (input == "2")
             {
                 playerOne = new Human();
                 playerTwo = new Human();
-                Console.WriteLine("");
-                Console.WriteLine("You selected MULTI-PLAYER");
+                Console.ForegroundColor = ConsoleColor.Magenta; Console.WriteLine("You selected MULTI-PLAYER \n"); Console.ResetColor();
             }
             else 
             {
-                Console.WriteLine("Please Select [1] or [2] players");
-                Console.WriteLine("");
+                Console.WriteLine("\nINVALID INPUT \nPlease Select [1] or [2] players \n");
                 GetPlayers();
             }
-
         }
-
+        public void ChoosePlayerNames()
+        {
+            playerOne.GetName();
+            playerTwo.GetName();
+            
+        }
         public void EvaluateChoice()
         {
-
-            switch (playerOne.choice)
+            if (playerOne.choice == 1)
             {
-                case 1: RunRock();
-                    break;
-                case 2: RunPaper();
-                    break;
-                case 3: RunScissors();
-                    break;
-                case 4: RunLizard();
-                    break;
-                case 5: RunSpock();
-                    break;
-                default: Console.WriteLine("\nINVALID INPUT \n");
-                    playerOne.MakeChoice();
-                    break;
-            } 
-        }
-
-                public void RunRock()
-        {
-            switch (playerTwo.choice)
+                RunRock();
+            }
+            else if (playerOne.choice == 2)
             {
-                        case 1: // computer choose paper
-                            Console.WriteLine("\nPlayer One: ROCK \nPlayer Two: PAPER \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 2: // computer choose rock
-                            Console.WriteLine("\nPlayer One: ROCK \nPlayer Two: ROCK \n>>> IT'S A DRAW!!!! <<< \n");
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 3: // computer choose scissors
-                            Console.WriteLine("\nPlayer One: ROCK \nPlayer Two: SCISSORS \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 4: // computer choose lizard
-                            Console.WriteLine("\nPlayer One: ROCK \nPlayer Two: LIZARD \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 5: // computer choose spock
-                            Console.WriteLine("\nPlayer One: ROCK \nPlayer Two: SPOCK \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                    default: Console.WriteLine("\nINVALID INPUT \n");
-                    RunRock();
-                    break;
+                RunPaper();
+            }
+            else if (playerOne.choice == 3)
+            {
+                RunScissors();
+            }
+            else if (playerOne.choice == 4)
+            {
+                RunLizard();
+            }
+            else if (playerOne.choice == 5)
+            {
+                RunSpock();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                playerOne.MakeChoice();
             }
         }
-
+        public void RunRock()
+        {
+            playerTwo.MakeChoice();
+            if (playerTwo.choice == 1)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: ROCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: ROCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\nIT'S A DRAW!!!!\n"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 2)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: ROCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: PAPER", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: ROCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SCISSORS", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 4)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: ROCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: LIZARD", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 5)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: ROCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SPOCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                RunRock();
+            }
+        }
         public void RunPaper()
         {
-            switch (playerTwo.choice)
+            playerTwo.MakeChoice();
+            if (playerTwo.choice == 1)
             {
-                        case 1: // computer choose paper
-                            Console.WriteLine("\nPlayer One: PAPER \nPlayer Two: PAPER \n>>> IT'S A DRAW!!!! <<< \n");
-                            break;
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                case 2: // computer choose rock
-                            Console.WriteLine("\nPlayer One: PAPER \nPlayer Two: ROCK \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 3: // computer choose scissors
-                            Console.WriteLine("\nPlayer One: PAPER \nPlayer Two: SCISSORS \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 4: // computer choose lizard
-                            Console.WriteLine("\nPlayer One: PAPER \nPlayer Two: LIZARD \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 5: // computer choose spock
-                            Console.WriteLine("\nPlayer One: PAPER \nPlayer Two: SPOCK \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                    default: Console.WriteLine("\nINVALID INPUT \n");
-                    RunPaper();
-                    break;
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: PAPER", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: ROCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 2)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: PAPER", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: PAPER", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\nIT'S A DRAW!!!! \n"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: PAPER", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SCISSORS", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 4)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: PAPER", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: LIZARD", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 5)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: PAPER", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SPOCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                RunPaper();
             }
         }
-
         public void RunScissors()
         {
-            switch (playerTwo.choice)
+            playerTwo.MakeChoice();
+            if (playerTwo.choice == 1)
             {
-                        case 1: // computer choose paper
-                            Console.WriteLine("\nPlayer One: SCISSORS \nPlayer Two: PAPER \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 2: // computer choose rock
-                            Console.WriteLine("\nPlayer One: SCISSORS \nPlayer Two: ROCK \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 3: // computer choose scissors
-                            Console.WriteLine("\nPlayer One: SCISSORS \nPlayer Two: SCISSORS \n>>> IT'S A DRAW!!!! <<< \n");
-                            break;
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                case 4: // computer choose lizard
-                            Console.WriteLine("\nPlayer One: SCISSORS \nPlayer Two: LIZARD \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 5: // computer choose spock
-                            Console.WriteLine("\nPlayer One: SCISSORS \nPlayer Two: SPOCK \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                    default: Console.WriteLine("\nINVALID INPUT \n");
-                    RunScissors();
-                    break;
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SCISSORS", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: ROCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 2) 
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SCISSORS", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: PAPER", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor(); ;
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SCISSORS", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SCISSORS", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\nIT'S A DRAW!!!! \n"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 4)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SCISSORS", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: LIZARD", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 5)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SCISSORS", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SPOCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                RunScissors();
             }
         }
-
         public void RunLizard()
         {
-            switch (playerTwo.choice)
+            playerTwo.MakeChoice();
+            if (playerTwo.choice == 1)
             {
-                        case 1: // computer choose paper
-                            Console.WriteLine("\nPlayer One: LIZARD \nPlayer Two: PAPER \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 2: // computer choose rock
-                            Console.WriteLine("\nPlayer One: LIZARD \nPlayer Two: ROCK \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 3: // computer choose scissors
-                            Console.WriteLine("\nPlayer One: LIZARD \nPlayer Two: SCISSORS \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 4: // computer choose lizard
-                            Console.WriteLine("\nPlayer One: LIZARD \nPlayer Two: LIZARD \n>>> IT'S A DRAW!!!! <<< \n");
-                            break;
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                case 5: // computer choose spock
-                            Console.WriteLine("\nPlayer One: LIZARD \nPlayer Two: SPOCK \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                    default: Console.WriteLine("\nINVALID INPUT \n");
-                    RunLizard();
-                    break;
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: LIZARD", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: ROCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 2)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: LIZARD", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: PAPER", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: LIZARD", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SCISSORS", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 4)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: LIZARD", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: LIZARD", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\nIT'S A DRAW!!!! \n"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 5)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: LIZARD", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SPOCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                RunLizard();
             }
         }
 
         public void RunSpock()
-        { 
-            switch (playerTwo.choice)
-            { 
-                        case 1: // computer choose paper
-                                Console.WriteLine("\nPlayer One: SPOCK \nPlayer Two: PAPER \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 2: // computer choose rock
-                                Console.WriteLine("\nPlayer One: SPOCK \nPlayer Two: ROCK \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 3: // computer choose scissors
-                                Console.WriteLine("\nPlayer One: SPOCK \nPlayer Two: SCISSORS \n>>> PLAYER ONE WON! <<< \n>>> PLAYER TWO LOST! <<< \n>>>");
-                    playerOne.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 4: // computer choose lizard
-                                Console.WriteLine("\nPlayer One: SPOCK \nPlayer Two: LIZARD \n>>> PLAYER ONE LOST! <<< \n >>> PLAYER TWO WON! <<< \n");
-                    playerTwo.AddPoint();
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                    break;
-                        case 5: // computer choose spock
-                                Console.WriteLine("\nPlayer One: SPOCK \nPlayer Two: SPOCK \n>>> IT'S A DRAW!!!! <<< \n");
-                                break;
-                    Console.WriteLine("Player One: {0}", playerOne.GetScore());
-                    Console.WriteLine("Player Two: {0}", playerTwo.GetScore());
-                default: Console.WriteLine("\nINVALID INPUT \n");
-                    RunSpock();
-                    break;
-                }
+        {
+            playerTwo.MakeChoice();
+            if (playerTwo.choice == 1)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SPOCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: ROCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
             }
-
+            else if (playerTwo.choice == 2)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SPOCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: PAPER", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SPOCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SCISSORS", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} WON! \n{1} LOST! \n", playerOne.name, playerTwo.name); playerOne.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 4)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SPOCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: LIZARD", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\n{0} LOST! \n{1} WON! \n", playerOne.name, playerTwo.name); playerTwo.AddPoint(); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else if (playerTwo.choice == 5)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: SPOCK", playerOne.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: SPOCK", playerTwo.name); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("\nIT'S A DRAW!!!! \n"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan; Console.WriteLine("\n{0}: {1}", playerOne.name, playerOne.GetScore()); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta; Console.WriteLine("{0}: {1}", playerTwo.name, playerTwo.GetScore()); Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine("\nINVALID INPUT \n");
+                RunSpock();
+            }
+        }
         public void EndGame()
         {
-            Console.WriteLine("\nWould you like to play again? \nSelect [Y] Yes \nSelect [N] No \n");
-            string userInput = Console.ReadLine();
-            if (userInput == "Y" || userInput == "y")
+            Console.WriteLine("\nWould you like to play again? \nSELECT [Y] YES \nSELECT [N] NO \n");
+            string userInput = Console.ReadLine().ToUpper();
+            if (userInput == "Y" || userInput == "yes")
             {
-                PlayGame();
+                StartGame();
             }
-            else if (userInput == "N" || userInput == "n")
+            else if (userInput == "N" || userInput == "no")
             {
-                Console.WriteLine("THANK YOU FOR PLAYING \npress any key to close the game.......... \n");
-                Console.ReadKey();
+                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("\nTHANK YOU FOR PLAYING \npress any key to close the game . . . . . . . . . . \n"); Console.ResetColor();
+                Console.ReadKey();  Environment.Exit(0);
             }
             else
             {
@@ -324,6 +385,5 @@ namespace RPSLS
                 EndGame();
             }
         }
-        }
-
     }
+}
